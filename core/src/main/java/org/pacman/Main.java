@@ -8,15 +8,24 @@ import org.pacman.model.MapaJogo;
 import org.pacman.model.Pacman;
 import org.pacman.util.CarregadorMapa;
 import org.pacman.view.RenderizadorJogo;
+import com.badlogic.gdx.audio.Music;
 
 public class Main extends ApplicationAdapter {
     private MapaJogo mapa;
     private Pacman pacman;
     private ControladorJogo controlador;
     private RenderizadorJogo renderizador;
+    private Music musicaFundo;
 
     @Override
     public void create() {
+        musicaFundo = Gdx.audio.newMusic(
+            Gdx.files.internal("sounds/fundo.mp3")
+        );
+
+        musicaFundo.setLooping(true);
+        musicaFundo.setVolume(0.2f);
+        musicaFundo.play();
         String texto = Gdx.files.internal("maps/mapa1.txt").readString();
         mapa = CarregadorMapa.carregar(texto);
         pacman = new Pacman(mapa.getLinhaInicialPacman(), mapa.getColunaInicialPacman());
@@ -35,5 +44,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         renderizador.dispose();
         controlador.dispose();
+        musicaFundo.dispose();
     }
 }

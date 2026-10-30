@@ -7,6 +7,7 @@ public class Pontuacao {
 
     private int pontos;
     private int recorde;
+    private int fantasmasComidos = 0;
 
     public Pontuacao() {
         pontos = 0;
@@ -41,5 +42,22 @@ public class Pontuacao {
 
     public void zerar() {
         pontos = 0;
+        reiniciarComboFantasmas();
+    }
+
+    public int comerFantasma() {
+        int[] valores = {200, 400, 800, 1600};
+
+        int indice = Math.min(fantasmasComidos, 3);
+        int pontosGanhos = valores[indice];
+
+        adicionar(pontosGanhos);
+        fantasmasComidos++;
+
+        return pontosGanhos;
+    }
+
+    public void reiniciarComboFantasmas() {
+        fantasmasComidos = 0;
     }
 }
