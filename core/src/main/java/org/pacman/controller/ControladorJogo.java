@@ -4,11 +4,15 @@ import org.pacman.model.Direcao;
 import org.pacman.model.MapaJogo;
 import org.pacman.model.Pacman;
 import org.pacman.model.Pontuacao;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 
 public class ControladorJogo {
     private final MapaJogo mapa;
     private final Pacman pacman;
     private final Pontuacao pontuacao = new Pontuacao();
+    private final Sound somComer =
+        Gdx.audio.newSound(Gdx.files.internal("sounds/comer.mp3"));
     private final ManipuladorEntrada entrada = new ManipuladorEntrada();
 
     public ControladorJogo(MapaJogo mapa, Pacman pacman) {
@@ -38,6 +42,11 @@ public class ControladorJogo {
         if (pontos > 0) {
             pontuacao.adicionar(pontos);
             mapa.removerPonto(linha, coluna);
+            somComer.play();
         }
+    }
+
+    public void dispose() {
+        somComer.dispose();;;;;;
     }
 }

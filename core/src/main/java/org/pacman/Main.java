@@ -34,5 +34,6 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         renderizador.dispose();
+        controlador.dispose();
     }
 }
