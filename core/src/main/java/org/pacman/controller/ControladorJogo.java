@@ -13,6 +13,10 @@ public class ControladorJogo {
     private final Pontuacao pontuacao = new Pontuacao();
     private final Sound somComer =
         Gdx.audio.newSound(Gdx.files.internal("sounds/comer.mp3"));
+    private final Sound somEspecial =
+        Gdx.audio.newSound(Gdx.files.internal("sounds/especial.mp3"));
+    private final Sound somFruta =
+        Gdx.audio.newSound(Gdx.files.internal("sounds/fruta.mp3"));
     private final ManipuladorEntrada entrada = new ManipuladorEntrada();
 
     public ControladorJogo(MapaJogo mapa, Pacman pacman) {
@@ -42,11 +46,20 @@ public class ControladorJogo {
         if (pontos > 0) {
             pontuacao.adicionar(pontos);
             mapa.removerPonto(linha, coluna);
-            somComer.play();
+
+            if (pontos == 10) {
+                somComer.play();
+            } else if (pontos == 50) {
+                somEspecial.play();
+            } else if (pontos == 100) {
+                somFruta.play();
+            }
         }
     }
 
     public void dispose() {
-        somComer.dispose();;;;;;
+        somComer.dispose();
+        somEspecial.dispose();
+        somFruta.dispose();
     }
 }
