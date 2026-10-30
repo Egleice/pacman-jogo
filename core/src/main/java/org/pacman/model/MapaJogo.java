@@ -40,4 +40,22 @@ public class MapaJogo {
             celulas[linha][coluna] = ' ';
         }
     }
+    public int pontosDoItem(int linha, int coluna) {
+        if (linha < 0 || linha >= getLinhas()
+            || coluna < 0 || coluna >= getColunas()) {
+            return 0;
+        }
+
+        char item = celulas[linha][coluna];
+
+        if (item == '.') {
+            return 10;
+        }
+
+        if (item == 'o') {
+            return 50;
+        }
+
+        return 0;
+    }
 }

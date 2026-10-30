@@ -3,15 +3,21 @@ package org.pacman.controller;
 import org.pacman.model.Direcao;
 import org.pacman.model.MapaJogo;
 import org.pacman.model.Pacman;
+import org.pacman.model.Pontuacao;
 
 public class ControladorJogo {
     private final MapaJogo mapa;
     private final Pacman pacman;
+    private final Pontuacao pontuacao = new Pontuacao();
     private final ManipuladorEntrada entrada = new ManipuladorEntrada();
 
     public ControladorJogo(MapaJogo mapa, Pacman pacman) {
         this.mapa = mapa;
         this.pacman = pacman;
+    }
+
+    public Pontuacao getPontuacao() {
+        return pontuacao;
     }
 
     public void atualizar(float delta) {
@@ -24,8 +30,14 @@ public class ControladorJogo {
     }
 
     private void comerPonto() {
-        if (mapa.temPonto(pacman.getLinha(), pacman.getColuna())) {
-            mapa.removerPonto(pacman.getLinha(), pacman.getColuna());
+        int linha = pacman.getLinha();
+        int coluna = pacman.getColuna();
+
+        int pontos = mapa.pontosDoItem(linha, coluna);
+
+        if (pontos > 0) {
+            pontuacao.adicionar(pontos);
+            mapa.removerPonto(linha, coluna);
         }
     }
 }

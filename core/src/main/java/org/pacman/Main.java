@@ -28,7 +28,7 @@ public class Main extends ApplicationAdapter {
     public void render() {
         controlador.atualizar(Gdx.graphics.getDeltaTime());
         ScreenUtils.clear(0.05f, 0.05f, 0.1f, 1f);
-        renderizador.desenhar(mapa, pacman);
+        renderizador.desenhar(mapa, pacman, controlador.getPontuacao());
     }
 
     @Override
