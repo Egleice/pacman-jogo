@@ -51,9 +51,16 @@ public class RenderizadorJogo {
                 if (mapa.ehParede(linha, coluna)) {
                     formas.setColor(Color.BLUE);
                     formas.rect(x, y, TAMANHO_CELULA, TAMANHO_CELULA);
+
+                } else if (mapa.temFruta(linha, coluna)) {
+                    formas.setColor(Color.RED);
+                    formas.circle(x + TAMANHO_CELULA / 2f,
+                        y + TAMANHO_CELULA / 2f, TAMANHO_CELULA / 4f);
+
                 } else if (mapa.temPonto(linha, coluna)) {
                     formas.setColor(Color.GOLD);
-                    formas.circle(x + TAMANHO_CELULA / 2f, y + TAMANHO_CELULA / 2f, TAMANHO_CELULA / 8f);
+                    formas.circle(x + TAMANHO_CELULA / 2f,
+                        y + TAMANHO_CELULA / 2f, TAMANHO_CELULA / 8f);
                 }
             }
         }

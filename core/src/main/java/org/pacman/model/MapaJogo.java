@@ -32,7 +32,7 @@ public class MapaJogo {
             return false;
         }
         char c = celulas[linha][coluna];
-        return c == '.' || c == 'o';
+        return c == '.' || c == 'o' || c == 'F';
     }
 
     public void removerPonto(int linha, int coluna) {
@@ -40,6 +40,7 @@ public class MapaJogo {
             celulas[linha][coluna] = ' ';
         }
     }
+
     public int pontosDoItem(int linha, int coluna) {
         if (linha < 0 || linha >= getLinhas()
             || coluna < 0 || coluna >= getColunas()) {
@@ -56,6 +57,18 @@ public class MapaJogo {
             return 50;
         }
 
+        if (item == 'F') {
+            return 100;
+        }
+
         return 0;
+    }
+
+    public boolean temFruta(int linha, int coluna) {
+        if (foraDoMapa(linha, coluna)) {
+            return false;
+        }
+
+        return celulas[linha][coluna] == 'F';
     }
 }
