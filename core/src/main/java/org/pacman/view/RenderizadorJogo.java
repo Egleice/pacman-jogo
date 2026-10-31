@@ -8,6 +8,7 @@ import org.pacman.model.Pacman;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.pacman.model.Pontuacao;
+import com.badlogic.gdx.graphics.Texture;
 
 public class RenderizadorJogo {
     private static final float TAMANHO_CELULA = 40f;
@@ -17,7 +18,15 @@ public class RenderizadorJogo {
     private final BitmapFont fonte = new BitmapFont();
     private float deslocamentoX;
     private float deslocamentoY;
+    private Texture texturaCereja;
 
+    public RenderizadorJogo() {
+        texturaCereja = new Texture(Gdx.files.internal("images/cereja.png"));
+        texturaCereja.setFilter(
+            Texture.TextureFilter.Nearest,
+            Texture.TextureFilter.Nearest
+        );
+    }
     public void desenhar(MapaJogo mapa, Pacman pacman, Pontuacao pontuacao) {
         // centraliza o mapa na janela
         deslocamentoX = (Gdx.graphics.getWidth() - mapa.getColunas() * TAMANHO_CELULA) / 2f;
@@ -29,6 +38,7 @@ public class RenderizadorJogo {
         formas.end();
 
         batch.begin();
+        desenharCerejas(mapa);
 
         fonte.setColor(Color.WHITE);
         fonte.getData().setScale(1.5f);
@@ -53,14 +63,32 @@ public class RenderizadorJogo {
                     formas.rect(x, y, TAMANHO_CELULA, TAMANHO_CELULA);
 
                 } else if (mapa.temFruta(linha, coluna)) {
-                    formas.setColor(Color.RED);
-                    formas.circle(x + TAMANHO_CELULA / 2f,
-                        y + TAMANHO_CELULA / 2f, TAMANHO_CELULA / 4f);
 
                 } else if (mapa.temPonto(linha, coluna)) {
                     formas.setColor(Color.GOLD);
                     formas.circle(x + TAMANHO_CELULA / 2f,
                         y + TAMANHO_CELULA / 2f, TAMANHO_CELULA / 8f);
+                }
+            }
+        }
+    }
+
+    private void desenharCerejas(MapaJogo mapa) {
+        for (int linha = 0; linha < mapa.getLinhas(); linha++) {
+            for (int coluna = 0; coluna < mapa.getColunas(); coluna++) {
+
+                if (mapa.temFruta(linha, coluna)) {
+                    float x = xDaColuna(coluna);
+                    float y = yDaLinha(linha, mapa.getLinhas());
+
+                    float tamanho = TAMANHO_CELULA * 0.8f;
+                    float margem = (TAMANHO_CELULA - tamanho) / 2f;
+
+                    batch.draw(texturaCereja,
+                        x + margem,
+                        y + margem,
+                        tamanho,
+                        tamanho);
                 }
             }
         }
@@ -86,5 +114,6 @@ public class RenderizadorJogo {
         formas.dispose();
         batch.dispose();
         fonte.dispose();
+        texturaCereja.dispose();
     }
 }
