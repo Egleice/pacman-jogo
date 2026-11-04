@@ -1,6 +1,6 @@
 package org.pacman.model;
 
-public class EstadoJogo {
+public enum EstadoJogo {
     MENU,
     JOGANDO,
     PAUSADO,
