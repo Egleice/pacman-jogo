@@ -54,20 +54,34 @@ public class ControladorJogo {
 
     public void atualizar(float delta) {
 
-        // Iniciar com Enter
+        // Iniciar a primeira partida
         if (estado == EstadoJogo.MENU) {
+
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 estado = EstadoJogo.JOGANDO;
             }
+
             return;
         }
 
-        // Pausar ou continuar
+        // NOVO: reiniciar depois de vencer ou perder
+        if (estado == EstadoJogo.GAME_OVER
+                || estado == EstadoJogo.VITORIA) {
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                reiniciarJogo();
+            }
+
+            return;
+        }
+
+        // Pausar e continuar
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)
                 || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 
             if (estado == EstadoJogo.JOGANDO) {
                 estado = EstadoJogo.PAUSADO;
+
             } else if (estado == EstadoJogo.PAUSADO) {
                 estado = EstadoJogo.JOGANDO;
             }
@@ -77,8 +91,9 @@ public class ControladorJogo {
             return;
         }
 
-        // Esperar dois segundos depois de perder vida
+        // Espera de 2 segundos apos perder vida
         if (tempoProtecao > 0f) {
+
             tempoProtecao -= delta;
 
             if (tempoProtecao < 0f) {
@@ -88,7 +103,7 @@ public class ControladorJogo {
             return;
         }
 
-        // Movimentação
+        // Movimentacao do Pac-Man
         Direcao direcao = entrada.lerDirecao();
 
         if (direcao != Direcao.NENHUMA) {
@@ -100,7 +115,7 @@ public class ControladorJogo {
         // Coletar itens
         comerPonto();
 
-        // Verificar vitória
+        // Verificar vitoria
         verificarVitoria();
     }
 
@@ -118,18 +133,21 @@ public class ControladorJogo {
 
             if (pontos == 10) {
                 somComer.play();
+
             } else if (pontos == 50) {
                 somEspecial.play();
+
             } else if (pontos == 100) {
                 somFruta.play();
             }
         }
     }
 
-    // Vence quando todas as bolinhas acabarem
     private void verificarVitoria() {
 
-        for (int linha = 0; linha < mapa.getLinhas(); linha++) {
+        for (int linha = 0;
+             linha < mapa.getLinhas();
+             linha++) {
 
             for (int coluna = 0;
                  coluna < mapa.getColunas();
@@ -146,7 +164,7 @@ public class ControladorJogo {
         estado = EstadoJogo.VITORIA;
     }
 
-    // Perder vida e voltar ao começo
+    // Perde uma vida e retorna ao inicio
     public void perderVida() {
 
         if (estado != EstadoJogo.JOGANDO) {
@@ -160,8 +178,10 @@ public class ControladorJogo {
         vidas--;
 
         if (vidas <= 0) {
+
             vidas = 0;
             estado = EstadoJogo.GAME_OVER;
+
         } else {
 
             pacman.reiniciarPosicao(
@@ -171,6 +191,31 @@ public class ControladorJogo {
 
             tempoProtecao = 2f;
         }
+    }
+
+    // NOVO: reinicia toda a partida
+    public void reiniciarJogo() {
+
+        // Restaurar as vidas
+        vidas = 3;
+
+        // Zerar pontuacao sem apagar o recorde
+        pontuacao.zerar();
+
+        // Recolocar bolinhas e frutas
+        mapa.reiniciarItens();
+
+        // Voltar o Pac-Man para o inicio
+        pacman.reiniciarPosicao(
+            mapa.getLinhaInicialPacman(),
+            mapa.getColunaInicialPacman()
+        );
+
+        // Limpar o tempo de espera
+        tempoProtecao = 0f;
+
+        // Comecar uma nova partida
+        estado = EstadoJogo.JOGANDO;
     }
 
     public void dispose() {
